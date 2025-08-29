@@ -1,0 +1,588 @@
+<!DOCTYPE html/>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>ORGAprop - Solution de Gestion & Contrôle</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #2c2c2c 0%, #1a1a1a 100%);
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .slide {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            margin: 30px 0;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            transform: translateY(50px);
+            opacity: 0;
+            animation: slideUp 0.8s forwards;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #2c2c2c, #00bcd4);
+        }
+
+        @keyframes slideUp {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .slide:nth-child(2) { animation-delay: 0.2s; }
+        .slide:nth-child(3) { animation-delay: 0.4s; }
+        .slide:nth-child(4) { animation-delay: 0.6s; }
+        .slide:nth-child(5) { animation-delay: 0.8s; }
+        .slide:nth-child(6) { animation-delay: 1.0s; }
+        .slide:nth-child(7) { animation-delay: 1.2s; }
+        .slide:nth-child(8) { animation-delay: 1.4s; }
+
+        .title-slide {
+            text-align: center;
+            background: linear-gradient(135deg, #2c2c2c, #1a1a1a);
+            color: white;
+            padding: 80px 40px;
+        }
+
+        .logo-container {
+            margin-bottom: 40px;
+        }
+
+        .logo-text {
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .orga-text {
+            color: #2c2c2c;
+            background: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+        }
+
+        .prop-text {
+            color: #a0a0a0;
+            font-weight: 300;
+        }
+
+        .divider-line {
+            width: 4px;
+            height: 60px;
+            background: #00bcd4;
+            border-radius: 2px;
+        }
+
+        .tagline {
+            font-size: 1.2rem;
+            color: #a0a0a0;
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            color: #2c2c2c;
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        h3 {
+            color: #00bcd4;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .feature-card {
+            background: linear-gradient(145deg, #f8f9fa, #e9ecef);
+            padding: 30px;
+            border-radius: 15px;
+            border-left: 5px solid #00bcd4;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #2c2c2c, #00bcd4);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .pricing-table {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .pricing-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .pricing-card:hover {
+            transform: scale(1.05);
+        }
+
+        .price {
+            font-size: 3rem;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        .financial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .metric-card {
+            background: linear-gradient(135deg, #2c2c2c, #00bcd4);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: rgba(255,255,255,0.1);
+            transform: rotate(45deg);
+            transition: transform 0.5s ease;
+        }
+
+        .metric-card:hover::before {
+            transform: rotate(45deg) translate(50%, 50%);
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .metric-label {
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, #2c2c2c, #00bcd4);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+        }
+
+        .benefits-list {
+            list-style: none;
+            margin: 20px 0;
+        }
+
+        .benefits-list li {
+            padding: 10px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+
+        .benefits-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #00bcd4;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .contact-info {
+            background: linear-gradient(135deg, #00bcd4, #2c2c2c);
+            color: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .logo-text {
+                font-size: 2.5rem;
+            }
+            
+            .title-slide p {
+                font-size: 1.2rem;
+            }
+            
+            h2 {
+                font-size: 2rem;
+            }
+            
+            .container {
+                padding: 10px;
+            }
+            
+            .slide {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Slide de titre -->
+        <div class="slide title-slide">
+            <div class="logo-container">
+                <div class="logo-text">
+                    <span class="orga-text">ORGA</span>
+                    <div class="divider-line"></div>
+                    <span class="prop-text">prop</span>
+                </div>
+                <div class="tagline">Logiciels • Conseils • Formations</div>
+            </div>
+            <p style="font-size: 1.5rem; opacity: 0.9;">Solution innovante de gestion et contrôle</p>
+        </div>
+
+        <!-- Présentation de l'entreprise -->
+        <div class="slide">
+            <h2>À Propos d'ORGAprop</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🏢</div>
+                    <h3>Notre Histoire</h3>
+                    <p>Société active depuis 2018, spécialisée dans les prestations de formation, conseil, audit et vente de logiciels pour bailleurs sociaux.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🛠️</div>
+                    <h3>Expertise Technique</h3>
+                    <p>Solutions logicielles innovantes pour le contrôle et la gestion, notamment dans le secteur de la propreté et de la maintenance des immeubles collectifs.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Approche Personnalisée</h3>
+                    <p>Accompagnement complet de la mise en place à la formation, avec support technique dédié.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fonctionnalités du logiciel -->
+        <div class="slide">
+            <h2>Fonctionnalités Principales</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🌐</div>
+                    <h3>Application Web</h3>
+                    <p>Interface Web simple et complète pour la gestion et l'organisation de la maintenance de vos immeubles.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3>Application Mobile</h3>
+                    <p>Interface Android simple et ludique pour le contrôle sur le terrain. Une seule compétence nécessaire : savoir CLIQUER !</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Contrôle & Évaluation</h3>
+                    <p>Système complet d'évaluation, planification et contrôle des opérations de nettoyage et maintenance des immeubles d'habitation.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔄</div>
+                    <h3>Intégration Simple</h3>
+                    <p>Compatible avec vos fichiers Excel existants. Nous nous chargeons de l'intégration des données dans le logiciel.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎓</div>
+                    <h3>Formation & Support</h3>
+                    <p>Accompagnement complet avec formation, assistance technique par téléphone ou prise à distance.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Les Applications ORGAprop -->
+        <div class="slide">
+            <h2>Les Applications ORGAprop</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">⚙️</div>
+                    <h3>ORGAproxi</h3>
+                    <p>Organisez l'activité propreté de vos intervenants terrain.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📋</div>
+                    <h3>ORGAcontrat</h3>
+                    <p>Réalisez la mise en place de vos contrats propreté et pilotez les interventions.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">✅</div>
+                    <h3>CONTROLprop</h3>
+                    <p>Réalisez le contrôle propreté des immeubles d'habitation.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>CONTROLsecu</h3>
+                    <p>Réalisez le contrôle sécurité du quotidien de vos immeubles d'habitation.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📡</div>
+                    <h3>CONTROLprest</h3>
+                    <p>Suivez en direct le passage des intervenants par flash NFC.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Avantages -->
+        <div class="slide">
+            <h2>Avantages</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center;">
+                <div>
+                    <h3>Pourquoi Choisir ORGAprop ?</h3>
+                    <ul class="benefits-list">
+                        <li>Interface ultra-simplifiée, accessible à tous</li>
+                        <li>Déploiement rapide sans formation complexe</li>
+                        <li>Support technique réactif et personnalisé</li>
+                        <li>Solution mobile pour le terrain</li>
+                        <li>Évolutivité selon vos besoins</li>
+                        <li>Expertise sectorielle reconnue</li>
+                    </ul>
+                </div>
+                <div class="feature-card" style="text-align: center;">
+                    <div class="feature-icon" style="margin: 0 auto 20px;">⚡</div>
+                    <h3>Amélioration de votre productivité</h3>
+                    <div class="metric-value" style="color: #00bcd4;">+70%</div>
+                    <p>d'efficacité en + dans la gestion de vos résidences</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Données utilisateurs -->
+        <div class="slide">
+            <h2>Données Utilisateurs</h2>
+            <div class="financial-grid">
+                <div class="metric-card">
+                    <div class="metric-value">455</div>
+                    <div class="metric-label">Utilisateurs Actifs</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">36,807</div>
+                    <div class="metric-label">Entrées Gérées</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">173,026</div>
+                    <div class="metric-label">Contrôles Réalisés</div>
+                </div>
+            </div>
+            
+            <h3>Modèle Économique Détaillé</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 30px;">
+                <div class="feature-card">
+                    <h4>Structure Tarifaire</h4>
+                    <ul class="benefits-list">
+                        <li>Abonnements modulaires (4-20€/module/mois)</li>
+                        <li>Maintenance technique (480€ HT/an)</li>
+                        <li>Formation et conseil (sur devis)</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <h4>Avantages du Modèle</h4>
+                    <ul class="benefits-list">
+                        <li>Flexibilité totale client</li>
+                        <li>Montée en gamme progressive</li>
+                        <li>Coûts de support optimisés</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact et conclusion -->
+        <div class="slide">
+            <h2>Prochaines Étapes</h2>
+            <div style="text-align: center; margin: 40px 0;">
+                <h3>Prêt à Transformer Votre Gestion ?</h3>
+                <p style="font-size: 1.2rem; margin: 20px 0; color: #666;">
+                    Découvrez comment ORGAprop peut optimiser vos processus de contrôle et de gestion.
+                </p>
+                <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin: 30px 0;">
+                    <button class="cta-button">Demander une Démo</button>
+                </div>
+            </div>
+            
+            <div class="contact-info">
+                <h3>Contact Commercial</h3>
+                <p>📧 contact@orgaprop.net</p>
+                <p>📞 Support technique disponible</p>
+                <p>📍 Cabanac-et-Villagrains, Nouvelle-Aquitaine</p>
+                <p style="margin-top: 20px; font-style: italic; font-size: 1.3rem;">
+                    "Simplifiez votre gestion, optimisez vos résultats"
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Animation d'apparition des slides au scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observer tous les slides
+        document.querySelectorAll('.slide').forEach(slide => {
+            observer.observe(slide);
+        });
+
+        // Ajout d'interactivité aux boutons
+        document.querySelectorAll('.cta-button').forEach(button => {
+            button.addEventListener('click', function() {
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 150);
+                
+                // Action spécifique selon le bouton
+                if (this.textContent.includes('Demander une Démo')) {
+                    // Ouvrir le client mail avec l'adresse ORGAprop
+                    window.location.href = 'mailto:contact@orgaprop.net?subject=Demande de démonstration ORGAprop&body=Bonjour,%0D%0A%0D%0AJe souhaiterais obtenir une démonstration de vos solutions ORGAprop.%0D%0A%0D%0ACordialement';
+                } else {
+                    // Pour les autres boutons (si il y en a)
+                    alert('Action: ' + this.textContent + '\nContacts: contact@orgaprop.net');
+                }
+            });
+        });
+
+        // Animation des métriques
+        const animateNumbers = () => {
+            const metrics = document.querySelectorAll('.metric-value');
+            metrics.forEach(metric => {
+                const text = metric.textContent;
+                
+                // Vérifier si c'est le pourcentage
+                if (text.includes('%')) {
+                    // Ne pas animer le pourcentage, le laisser tel quel
+                    return;
+                }
+                
+                // Extraire le nombre en gérant les virgules
+                let number;
+                if (text.includes(',')) {
+                    number = parseInt(text.replace(/,/g, ''));
+                } else {
+                    number = parseInt(text.replace(/\D/g, ''));
+                }
+                
+                if (number && !metric.animated) {
+                    metric.animated = true;
+                    let current = 0;
+                    const increment = number / 50;
+                    const timer = setInterval(() => {
+                        current += increment;
+                        if (current >= number) {
+                            current = number;
+                            clearInterval(timer);
+                        }
+                        
+                        // Formater le nombre avec des virgules si nécessaire
+                        let displayNumber = Math.floor(current);
+                        if (displayNumber >= 1000) {
+                            displayNumber = displayNumber.toLocaleString('fr-FR');
+                        }
+                        
+                        metric.textContent = displayNumber;
+                    }, 30);
+                }
+            });
+        };
+
+        // Déclencher l'animation des nombres quand les métriques sont visibles
+        const metricsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateNumbers();
+                }
+            });
+        });
+
+        document.querySelectorAll('.financial-grid').forEach(grid => {
+            metricsObserver.observe(grid);
+        });
+    </script>
+</body>
+</html>
