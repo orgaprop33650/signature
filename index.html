@@ -1,9 +1,9 @@
-<!DOCTYPE html/>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>ORGAprop - Solution de Gestion & Contrôle</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ORGAprop - Présentation Interactive</title>
     <style>
         * {
             margin: 0;
@@ -18,77 +18,83 @@
             overflow-x: hidden;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
+        .presentation-container {
+            position: relative;
+            height: 100vh;
+            overflow: hidden;
         }
 
         .slide {
+            position: absolute;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: translateX(100px);
+            transition: all 0.8s cubic-bezier(0.25, 0.8, 0.25, 1);
+            padding: 40px;
+        }
+
+        .slide.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .slide-content {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
             border-radius: 20px;
-            padding: 40px;
-            margin: 30px 0;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            transform: translateY(50px);
-            opacity: 0;
-            animation: slideUp 0.8s forwards;
+            padding: 60px;
+            max-width: 1200px;
+            width: 100%;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.2);
             position: relative;
             overflow: hidden;
         }
 
-        .slide::before {
+        .slide-content::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
-            height: 4px;
+            height: 6px;
             background: linear-gradient(90deg, #2c2c2c, #00bcd4);
         }
 
-        @keyframes slideUp {
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-
-        .slide:nth-child(2) { animation-delay: 0.2s; }
-        .slide:nth-child(3) { animation-delay: 0.4s; }
-        .slide:nth-child(4) { animation-delay: 0.6s; }
-        .slide:nth-child(5) { animation-delay: 0.8s; }
-        .slide:nth-child(6) { animation-delay: 1.0s; }
-        .slide:nth-child(7) { animation-delay: 1.2s; }
-        .slide:nth-child(8) { animation-delay: 1.4s; }
-
         .title-slide {
-            text-align: center;
             background: linear-gradient(135deg, #2c2c2c, #1a1a1a);
             color: white;
-            padding: 80px 40px;
         }
 
-        .logo-container {
-            margin-bottom: 40px;
+        .title-slide .slide-content {
+            background: transparent;
+            text-align: center;
         }
 
         .logo-text {
-            font-size: 4rem;
+            font-size: 4.5rem;
             font-weight: 800;
-            margin-bottom: 10px;
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 15px;
         }
 
         .orga-text {
             color: #2c2c2c;
             background: white;
-            padding: 10px 20px;
-            border-radius: 5px;
+            padding: 15px 30px;
+            border-radius: 10px;
+            animation: pulse 4s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
 
         .prop-text {
@@ -97,100 +103,82 @@
         }
 
         .divider-line {
-            width: 4px;
-            height: 60px;
+            width: 6px;
+            height: 80px;
             background: #00bcd4;
-            border-radius: 2px;
+            border-radius: 3px;
+            animation: glow 4s infinite alternate;
         }
 
-        .tagline {
-            font-size: 1.2rem;
-            color: #a0a0a0;
-            font-style: italic;
-            margin-bottom: 20px;
+        @keyframes glow {
+            from { box-shadow: 0 0 5px #00bcd4; }
+            to { box-shadow: 0 0 20px #00bcd4, 0 0 30px #00bcd4; }
+        }
+
+        h1, h2 {
+            color: #2c2c2c;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 3rem;
+            text-align: center;
         }
 
         h2 {
-            color: #2c2c2c;
             font-size: 2.5rem;
-            margin-bottom: 30px;
-            position: relative;
+            border-bottom: 3px solid #00bcd4;
+            padding-bottom: 10px;
         }
 
-        h3 {
-            color: #00bcd4;
-            font-size: 1.8rem;
-            margin-bottom: 20px;
-        }
-
-        .features-grid {
+        .highlight-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-            margin: 30px 0;
+            gap: 30px;
+            margin: 40px 0;
         }
 
-        .feature-card {
+        .highlight-card {
             background: linear-gradient(145deg, #f8f9fa, #e9ecef);
             padding: 30px;
             border-radius: 15px;
             border-left: 5px solid #00bcd4;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: all 0.3s ease;
+            cursor: pointer;
         }
 
-        .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        .highlight-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border-left-width: 8px;
         }
 
-        .feature-icon {
-            width: 60px;
-            height: 60px;
+        .icon {
+            width: 70px;
+            height: 70px;
             background: linear-gradient(135deg, #2c2c2c, #00bcd4);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 24px;
-            margin-bottom: 15px;
-        }
-
-        .pricing-table {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
-            margin: 40px 0;
-        }
-
-        .pricing-card {
-            background: white;
-            border-radius: 20px;
-            padding: 40px 30px;
-            text-align: center;
-            position: relative;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            font-size: 28px;
+            margin-bottom: 20px;
             transition: transform 0.3s ease;
         }
 
-        .pricing-card:hover {
-            transform: scale(1.05);
+        .highlight-card:hover .icon {
+            transform: rotate(360deg);
         }
 
-        .price {
-            font-size: 3rem;
-            font-weight: bold;
-            margin: 20px 0;
-        }
-
-        .financial-grid {
+        .stats-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin: 30px 0;
+            gap: 25px;
+            margin: 40px 0;
         }
 
-        .metric-card {
+        .stat-card {
             background: linear-gradient(135deg, #2c2c2c, #00bcd4);
             color: white;
             padding: 30px;
@@ -198,390 +186,608 @@
             text-align: center;
             position: relative;
             overflow: hidden;
+            transform: scale(0.9);
+            opacity: 0;
+            animation: slideInScale 0.6s ease forwards;
         }
 
-        .metric-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: rgba(255,255,255,0.1);
-            transform: rotate(45deg);
-            transition: transform 0.5s ease;
+        @keyframes slideInScale {
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
         }
 
-        .metric-card:hover::before {
-            transform: rotate(45deg) translate(50%, 50%);
-        }
+        .stat-card:nth-child(1) { animation-delay: 0.1s; }
+        .stat-card:nth-child(2) { animation-delay: 0.3s; }
+        .stat-card:nth-child(3) { animation-delay: 0.5s; }
+        .stat-card:nth-child(4) { animation-delay: 0.7s; }
 
-        .metric-value {
-            font-size: 2.5rem;
+        .stat-number {
+            font-size: 3rem;
             font-weight: bold;
             margin-bottom: 10px;
-            position: relative;
-            z-index: 1;
+            counter-reset: number;
         }
 
-        .metric-label {
-            opacity: 0.9;
+        .navigation {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            padding: 15px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #2c2c2c;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .nav-btn:hover, .nav-btn.active {
+            background: #00bcd4;
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: #00bcd4;
+            transition: width 0.3s ease;
+            z-index: 1001;
+        }
+
+        .slide-indicator {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            color: white;
+            font-weight: bold;
+            background: rgba(0,0,0,0.5);
+            padding: 10px 20px;
+            border-radius: 25px;
+            z-index: 1000;
+        }
+
+        .timeline {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 40px 0;
+            position: relative;
+            gap: 15px;
+            flex-wrap: nowrap;
+            overflow: visible;
+        }
+
+        .timeline::before {
+            display: none;
+        }
+
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 3px;
+            background: #00bcd4;
+            z-index: 0;
+        }
+
+        .timeline-item {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
             position: relative;
             z-index: 1;
+            width: 150px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            flex-shrink: 0;
+            font-size: 0.9rem;
+        }
+
+        .timeline-item h4 {
+            font-size: 1rem;
+            margin-bottom: 10px;
+            color: #2c2c2c;
+        }
+
+        .timeline-item p {
+            font-size: 0.8rem;
+            line-height: 1.3;
+            margin: 5px 0;
+        }
+
+        .timeline-item:hover {
+            transform: scale(1.1);
+        }
+
+        .cta-section {
+            text-align: center;
+            margin-top: 50px;
         }
 
         .cta-button {
             background: linear-gradient(135deg, #2c2c2c, #00bcd4);
             color: white;
-            padding: 15px 40px;
+            padding: 20px 50px;
             border: none;
             border-radius: 50px;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            margin: 10px;
         }
 
         .cta-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
         }
 
-        .benefits-list {
-            list-style: none;
-            margin: 20px 0;
+        .expert-profile {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 40px;
+            align-items: center;
+            margin: 40px 0;
         }
 
-        .benefits-list li {
-            padding: 10px 0;
-            padding-left: 30px;
-            position: relative;
-        }
-
-        .benefits-list li::before {
-            content: '✓';
-            position: absolute;
-            left: 0;
-            color: #00bcd4;
-            font-weight: bold;
-            font-size: 1.2rem;
-        }
-
-        .contact-info {
-            background: linear-gradient(135deg, #00bcd4, #2c2c2c);
+        .profile-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #2c2c2c, #00bcd4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
             color: white;
-            padding: 40px;
-            border-radius: 20px;
-            text-align: center;
-            margin-top: 30px;
+            margin: 0 auto;
+        }
+
+        .animated-text {
+            animation: typewriter 6s steps(40) infinite;
+            border-right: 3px solid #00bcd4;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        @keyframes typewriter {
+            0%, 100% { width: 0; }
+            50% { width: 100%; }
         }
 
         @media (max-width: 768px) {
+            .slide-content {
+                padding: 30px 20px;
+            }
+            
             .logo-text {
                 font-size: 2.5rem;
+                flex-direction: column;
+                gap: 10px;
             }
             
-            .title-slide p {
-                font-size: 1.2rem;
+            .expert-profile {
+                grid-template-columns: 1fr;
+                text-align: center;
             }
             
-            h2 {
-                font-size: 2rem;
-            }
-            
-            .container {
-                padding: 10px;
-            }
-            
-            .slide {
-                padding: 20px;
-            }
+            h1 { font-size: 2rem; }
+            h2 { font-size: 1.8rem; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Slide de titre -->
-        <div class="slide title-slide">
-            <div class="logo-container">
+    <div class="progress-bar" id="progressBar"></div>
+    <div class="slide-indicator" id="slideIndicator">1 / 7</div>
+
+    <div class="presentation-container">
+        <!-- Slide 1: Titre -->
+        <div class="slide title-slide active">
+            <div class="slide-content">
                 <div class="logo-text">
                     <span class="orga-text">ORGA</span>
                     <div class="divider-line"></div>
                     <span class="prop-text">prop</span>
                 </div>
-                <div class="tagline">Logiciels • Conseils • Formations</div>
-            </div>
-            <p style="font-size: 1.5rem; opacity: 0.9;">Solution innovante de gestion et contrôle</p>
-        </div>
-
-        <!-- Présentation de l'entreprise -->
-        <div class="slide">
-            <h2>À Propos d'ORGAprop</h2>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">🏢</div>
-                    <h3>Notre Histoire</h3>
-                    <p>Société active depuis 2018, spécialisée dans les prestations de formation, conseil, audit et vente de logiciels pour bailleurs sociaux.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🛠️</div>
-                    <h3>Expertise Technique</h3>
-                    <p>Solutions logicielles innovantes pour le contrôle et la gestion, notamment dans le secteur de la propreté et de la maintenance des immeubles collectifs.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🎯</div>
-                    <h3>Approche Personnalisée</h3>
-                    <p>Accompagnement complet de la mise en place à la formation, avec support technique dédié.</p>
-                </div>
+                <p style="font-size: 1.8rem; margin-bottom: 20px;">Logiciels • Conseils • Formations</p>
+                <p class="animated-text" style="font-size: 1.3rem; opacity: 0.9;">Votre partenaire expert en gestion de la propreté</p>
             </div>
         </div>
 
-        <!-- Fonctionnalités du logiciel -->
+        <!-- Slide 2: L'entreprise -->
         <div class="slide">
-            <h2>Fonctionnalités Principales</h2>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">🌐</div>
-                    <h3>Application Web</h3>
-                    <p>Interface Web simple et complète pour la gestion et l'organisation de la maintenance de vos immeubles.</p>
+            <div class="slide-content">
+                <h1>ORGAprop en Chiffres</h1>
+                
+                <!-- Section Formation -->
+                <div style="margin-bottom: 50px;">
+                    <h2 style="font-size: 2rem; text-align: center; color: #2c2c2c; margin-bottom: 30px;">🎓 FORMATION</h2>
+                    <div class="stats-container" style="grid-template-columns: 1fr; max-width: 400px; margin: 0 auto;">
+                        <div class="stat-card">
+                            <div class="stat-number">19</div>
+                            <p>Années d'expérience<br>en formation (depuis 2006)</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="feature-card">
-                    <div class="feature-icon">📱</div>
-                    <h3>Application Mobile</h3>
-                    <p>Interface Android simple et ludique pour le contrôle sur le terrain. Une seule compétence nécessaire : savoir CLIQUER !</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">📊</div>
-                    <h3>Contrôle & Évaluation</h3>
-                    <p>Système complet d'évaluation, planification et contrôle des opérations de nettoyage et maintenance des immeubles d'habitation.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🔄</div>
-                    <h3>Intégration Simple</h3>
-                    <p>Compatible avec vos fichiers Excel existants. Nous nous chargeons de l'intégration des données dans le logiciel.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🎓</div>
-                    <h3>Formation & Support</h3>
-                    <p>Accompagnement complet avec formation, assistance technique par téléphone ou prise à distance.</p>
-                </div>
-            </div>
-        </div>
 
-        <!-- Les Applications ORGAprop -->
-        <div class="slide">
-            <h2>Les Applications ORGAprop</h2>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">⚙️</div>
-                    <h3>ORGAproxi</h3>
-                    <p>Organisez l'activité propreté de vos intervenants terrain.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">📋</div>
-                    <h3>ORGAcontrat</h3>
-                    <p>Réalisez la mise en place de vos contrats propreté et pilotez les interventions.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">✅</div>
-                    <h3>CONTROLprop</h3>
-                    <p>Réalisez le contrôle propreté des immeubles d'habitation.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🔒</div>
-                    <h3>CONTROLsecu</h3>
-                    <p>Réalisez le contrôle sécurité du quotidien de vos immeubles d'habitation.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">📡</div>
-                    <h3>CONTROLprest</h3>
-                    <p>Suivez en direct le passage des intervenants par flash NFC.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Avantages -->
-        <div class="slide">
-            <h2>Avantages</h2>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center;">
+                <!-- Section Logiciels -->
                 <div>
-                    <h3>Pourquoi Choisir ORGAprop ?</h3>
-                    <ul class="benefits-list">
-                        <li>Interface ultra-simplifiée, accessible à tous</li>
-                        <li>Déploiement rapide sans formation complexe</li>
-                        <li>Support technique réactif et personnalisé</li>
-                        <li>Solution mobile pour le terrain</li>
-                        <li>Évolutivité selon vos besoins</li>
-                        <li>Expertise sectorielle reconnue</li>
-                    </ul>
+                    <h2 style="font-size: 2rem; text-align: center; color: #2c2c2c; margin-bottom: 30px;">💻 LOGICIELS</h2>
+                    <div class="stats-container">
+                        <div class="stat-card">
+                            <div class="stat-number">455</div>
+                            <p>Utilisateurs<br>actifs</p>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">36,807</div>
+                            <p>Entrées<br>gérées</p>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">173,026</div>
+                            <p>Contrôles<br>réalisés</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="feature-card" style="text-align: center;">
-                    <div class="feature-icon" style="margin: 0 auto 20px;">⚡</div>
-                    <h3>Amélioration de votre productivité</h3>
-                    <div class="metric-value" style="color: #00bcd4;">+70%</div>
-                    <p>d'efficacité en + dans la gestion de vos résidences</p>
+
+                <div style="text-align: center; margin-top: 40px;">
+                    <p style="font-size: 1.4rem; color: #00bcd4; font-weight: bold;">
+                        Une approche personnalisée avec un intervenant unique
+                    </p>
                 </div>
             </div>
         </div>
 
-        <!-- Données utilisateurs -->
+        <!-- Slide 3: Formations -->
         <div class="slide">
-            <h2>Données Utilisateurs</h2>
-            <div class="financial-grid">
-                <div class="metric-card">
-                    <div class="metric-value">455</div>
-                    <div class="metric-label">Utilisateurs Actifs</div>
+            <div class="slide-content">
+                <h2>🎓 FORMATIONS Spécialisées</h2>
+                <div style="text-align: center; margin-bottom: 40px;">
+                    <p style="font-size: 1.3rem; color: #00bcd4; font-weight: bold;">
+                        Développement des compétences pour vos équipes
+                    </p>
                 </div>
-                <div class="metric-card">
-                    <div class="metric-value">36,807</div>
-                    <div class="metric-label">Entrées Gérées</div>
+                
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin: 40px 0;">
+                    <div class="highlight-card">
+                        <div class="icon">👥</div>
+                        <h3>Équipes de Nettoyage</h3>
+                        <p>Formations pratiques aux techniques de nettoyage adaptées aux parties communes des immeubles d'habitation.</p>
+                    </div>
+                    <div class="highlight-card">
+                        <div class="icon">👨‍💼</div>
+                        <h3>Responsables & Encadrement</h3>
+                        <p>Formation au pilotage de la propreté, gestion d'équipes, contrôle qualité de la propreté et optimisation des processus.</p>
+                    </div>
+                    <div class="highlight-card">
+                        <div class="icon">🌱</div>
+                        <h3>Approche RSE</h3>
+                        <p>Techniques respectueuses de l'environnement, réduction de la dépendance chimique, sécurité du personnel.</p>
+                    </div>
                 </div>
-                <div class="metric-card">
-                    <div class="metric-value">173,026</div>
-                    <div class="metric-label">Contrôles Réalisés</div>
-                </div>
-            </div>
-            
-            <h3>Modèle Économique Détaillé</h3>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 30px;">
-                <div class="feature-card">
-                    <h4>Structure Tarifaire</h4>
-                    <ul class="benefits-list">
-                        <li>Abonnements modulaires (4-20€/module/mois)</li>
-                        <li>Maintenance technique (480€ HT/an)</li>
-                        <li>Formation et conseil (sur devis)</li>
-                    </ul>
-                </div>
-                <div class="feature-card">
-                    <h4>Avantages du Modèle</h4>
-                    <ul class="benefits-list">
-                        <li>Flexibilité totale client</li>
-                        <li>Montée en gamme progressive</li>
-                        <li>Coûts de support optimisés</li>
-                    </ul>
+
+                <div style="background: linear-gradient(135deg, #f8f9fa, #e9ecef); padding: 30px; border-radius: 15px; margin-top: 30px; text-align: center;">
+                    <h4 style="color: #2c2c2c;">Nos Clients Formation</h4>
+                    <div style="display: flex; justify-content: space-around; margin-top: 20px; flex-wrap: wrap; gap: 20px;">
+                        <div><strong>Le Foyer Stéphanais</strong><br>Formation annuelle depuis 2024</div>
+                        <div><strong>Drôme Aménagement Habitat</strong><br>Formation annuelle depuis 2010</div>
+                        <div><strong>Aquitanis</strong><br>Formation depuis 2018</div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Contact et conclusion -->
+        <!-- Slide 4: Conseils -->
         <div class="slide">
-            <h2>Prochaines Étapes</h2>
-            <div style="text-align: center; margin: 40px 0;">
-                <h3>Prêt à Transformer Votre Gestion ?</h3>
-                <p style="font-size: 1.2rem; margin: 20px 0; color: #666;">
-                    Découvrez comment ORGAprop peut optimiser vos processus de contrôle et de gestion.
-                </p>
-                <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin: 30px 0;">
-                    <button class="cta-button">Demander une Démo</button>
+            <div class="slide-content">
+                <h2>📊 CONSEILS & Audit</h2>
+                <div style="text-align: center; margin-bottom: 40px;">
+                    <p style="font-size: 1.3rem; color: #00bcd4; font-weight: bold;">
+                        Expertise et accompagnement personnalisé
+                    </p>
+                </div>
+
+                <div class="highlight-grid">
+                    <div class="highlight-card">
+                        <div class="icon">🔍</div>
+                        <h3>Audits de Gestion</h3>
+                        <p>Analyse approfondie des processus existants : plannings, qualité des prestations, attentes des habitants.</p>
+                    </div>
+                    <div class="highlight-card">
+                        <div class="icon">📋</div>
+                        <h3>Préconisations</h3>
+                        <p>Recommandations concrètes et personnalisées pour optimiser la gestion, réduire les coûts et améliorer la satisfaction.</p>
+                    </div>
+                    <div class="highlight-card">
+                        <div class="icon">📝</div>
+                        <h3>Rédaction de Marchés</h3>
+                        <p>Accompagnement à la rédaction et analyse des marchés de prestations de propreté selon vos besoins spécifiques.</p>
+                    </div>
+                    <div class="highlight-card">
+                        <div class="icon">⚖️</div>
+                        <h3>Conformité Réglementaire</h3>
+                        <p>Garantie du respect des exigences réglementaires et budgétaires dans vos marchés publics.</p>
+                    </div>
+                </div>
+
+                <div style="background: linear-gradient(135deg, #f8f9fa, #e9ecef); padding: 30px; border-radius: 15px; margin-top: 30px;">
+                    <h4 style="color: #2c2c2c; text-align: center;">Projets Conseil Réalisés</h4>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 20px;">
+                        <div style="text-align: center;">
+                            <strong>Aquitanis (2021-2025)</strong><br>
+                            Pilotage et management propreté<br>
+                            <em>5 ans d'accompagnement complet</em>
+                        </div>
+                        <div style="text-align: center;">
+                            <strong>Office 64 de l'Habitat</strong><br>
+                            Audit complet + ajustement des moyens<br>
+                            <em>2023-2024</em>
+                        </div>
+                        <div style="text-align: center;">
+                            <strong>Plaine Commune Habitat</strong><br>
+                            Conseil et expertise<br>
+                            <em>2025</em>
+                        </div>
+                    </div>
                 </div>
             </div>
-            
-            <div class="contact-info">
-                <h3>Contact Commercial</h3>
-                <p>📧 contact@orgaprop.net</p>
-                <p>📞 Support technique disponible</p>
-                <p>📍 Cabanac-et-Villagrains, Nouvelle-Aquitaine</p>
-                <p style="margin-top: 20px; font-style: italic; font-size: 1.3rem;">
-                    "Simplifiez votre gestion, optimisez vos résultats"
-                </p>
+        </div>
+
+        <!-- Slide 5: Logiciels -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>💻 LOGICIELS ORGAprop</h2>
+                <div style="text-align: center; margin-bottom: 40px;">
+                    <p style="font-size: 1.3rem; color: #00bcd4; font-weight: bold;">
+                        Solutions digitales sur mesure pour bailleurs sociaux
+                    </p>
+                </div>
+
+                <div class="highlight-grid">
+                    <div class="highlight-card">
+                        <div class="icon">⚙️</div>
+                        <h3>ORGAproxi</h3>
+                        <p><strong>Gestion terrain</strong><br>Organisez l'activité propreté de vos intervenants terrain avec simplicité et efficacité.</p>
+                    </div>
+                    <div class="highlight-card">
+                        <div class="icon">📋</div>
+                        <h3>ORGAcontrat</h3>
+                        <p><strong>Pilotage contrats</strong><br>Mise en place et pilotage de vos contrats propreté en toute efficacité.</p>
+                    </div>
+                    <div class="highlight-card">
+                        <div class="icon">✅</div>
+                        <h3>CONTROLprop</h3>
+                        <p><strong>Contrôle propreté</strong><br>Système complet de contrôle propreté des immeubles d'habitation.</p>
+                    </div>
+                    <div class="highlight-card">
+                        <div class="icon">🔒</div>
+                        <h3>CONTROLsecu</h3>
+                        <p><strong>Contrôle sécurité</strong><br>Contrôle sécurité quotidien de vos immeubles d'habitation.</p>
+                    </div>
+                    <div class="highlight-card">
+                        <div class="icon">📡</div>
+                        <h3>CONTROLprest</h3>
+                        <p><strong>Suivi NFC</strong><br>Suivi en temps réel des interventions par flash NFC.</p>
+                    </div>
+                    <div class="highlight-card">
+                        <div class="icon">🌐</div>
+                        <h3>Interface Web + Mobile</h3>
+                        <p><strong>Multi-plateforme</strong><br>Application web complète + app Android simple : il suffit de savoir CLIQUER !</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Références -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>Nos Références Prestigieuses</h2>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <h4>Drôme Aménagement</h4>
+                        <p><strong>depuis 2010</strong></p>
+                        <p>Formation annuelle équipes</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h4>Valence Romans Habitat</h4>
+                        <p><strong>depuis 2019</strong></p>
+                        <p>Logiciel ORGAprop</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h4>Aquitanis</h4>
+                        <p><strong>2021-2025</strong></p>
+                        <p>Pilotage et management propreté</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h4>Office 64</h4>
+                        <p><strong>2023-2024</strong></p>
+                        <p>Audit et ajustement des moyens</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h4>Le Foyer Stéphanais</h4>
+                        <p><strong>depuis 2024</strong></p>
+                        <p>Formation équipes proximité</p>
+                    </div>
+                </div>
+                <div style="text-align: center; margin-top: 40px;">
+                    <div style="background: linear-gradient(135deg, #00bcd4, #2c2c2c); color: white; padding: 30px; border-radius: 15px;">
+                        <h3>+70% d'efficacité en plus dans la gestion de la propreté</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: L'expert -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>Votre Expert : Jeoffrey CLAUX</h2>
+                <div class="expert-profile">
+                    <div class="profile-image">
+                        JC
+                    </div>
+                    <div>
+                        <h3 style="color: #00bcd4; margin-bottom: 20px;">24 ans d'expertise terrain</h3>
+                        <ul style="font-size: 1.1rem; line-height: 1.8;">
+                            <li>✓ Formateur spécialisé depuis 2000</li>
+                            <li>✓ Expert en nettoyage industriel multi-secteurs</li>
+                            <li>✓ Expérience terrain en entreprise de propreté</li>
+                            <li>✓ Spécialiste logement social depuis 2006</li>
+                            <li>✓ Approche RSE intégrée</li>
+                            <li>✓ Veille technologique constante</li>
+                        </ul>
+                        <p style="font-style: italic; margin-top: 20px; color: #666;">
+                            "En tant qu'intervenant unique, je garantis une réactivité maximale et un service sur mesure pour chaque projet."
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: Contact -->
+        <div class="slide">
+            <div class="slide-content">
+                <h1>Transformons Ensemble la Gestion Propreté de vos Immeubles</h1>
+                <div style="text-align: center; margin: 50px 0;">
+                    <p style="font-size: 1.4rem; margin-bottom: 30px;">
+                        Découvrez comment ORGAprop peut optimiser vos processus
+                    </p>
+                    <div class="cta-section">
+                        <button class="cta-button" onclick="contactUs()">
+                            📧 Contactez-nous
+                        </button>
+                    </div>
+                </div>
+                
+                <div style="background: linear-gradient(135deg, #00bcd4, #2c2c2c); color: white; padding: 40px; border-radius: 20px; text-align: center; margin-top: 40px;">
+                    <h3>Contact Direct</h3>
+                    <p style="font-size: 1.2rem; margin: 15px 0;">📧 contact@orgaprop.net</p>
+                    <p>📍 Cabanac-et-Villagrains, Nouvelle-Aquitaine</p>
+                    <p style="margin-top: 25px; font-style: italic; font-size: 1.4rem;">
+                        "Simplifiez votre gestion, optimisez vos résultats"
+                    </p>
+                </div>
             </div>
         </div>
     </div>
 
+    <div class="navigation">
+        <button class="nav-btn active" onclick="goToSlide(0)">Accueil</button>
+        <button class="nav-btn" onclick="goToSlide(1)">Chiffres</button>
+        <button class="nav-btn" onclick="goToSlide(2)">Formations</button>
+        <button class="nav-btn" onclick="goToSlide(3)">Conseils</button>
+        <button class="nav-btn" onclick="goToSlide(4)">Logiciels</button>
+        <button class="nav-btn" onclick="goToSlide(5)">Références</button>
+        <button class="nav-btn" onclick="goToSlide(6)">Expert</button>
+        <button class="nav-btn" onclick="goToSlide(7)">Contact</button>
+    </div>
+
     <script>
-        // Animation d'apparition des slides au scroll
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const navBtns = document.querySelectorAll('.nav-btn');
+        const progressBar = document.getElementById('progressBar');
+        const slideIndicator = document.getElementById('slideIndicator');
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            });
-        }, observerOptions);
+        function goToSlide(index) {
+            slides[currentSlide].classList.remove('active');
+            navBtns[currentSlide].classList.remove('active');
+            
+            currentSlide = index;
+            
+            slides[currentSlide].classList.add('active');
+            navBtns[currentSlide].classList.add('active');
+            
+            updateProgress();
+            animateNumbers();
+        }
 
-        // Observer tous les slides
-        document.querySelectorAll('.slide').forEach(slide => {
-            observer.observe(slide);
-        });
+        function updateProgress() {
+            const progress = ((currentSlide + 1) / slides.length) * 100;
+            progressBar.style.width = progress + '%';
+            slideIndicator.textContent = `${currentSlide + 1} / ${slides.length}`;
+        }
 
-        // Ajout d'interactivité aux boutons
-        document.querySelectorAll('.cta-button').forEach(button => {
-            button.addEventListener('click', function() {
-                this.style.transform = 'scale(0.95)';
-                setTimeout(() => {
-                    this.style.transform = '';
-                }, 150);
-                
-                // Action spécifique selon le bouton
-                if (this.textContent.includes('Demander une Démo')) {
-                    // Ouvrir le client mail avec l'adresse ORGAprop
-                    window.location.href = 'mailto:contact@orgaprop.net?subject=Demande de démonstration ORGAprop&body=Bonjour,%0D%0A%0D%0AJe souhaiterais obtenir une démonstration de vos solutions ORGAprop.%0D%0A%0D%0ACordialement';
-                } else {
-                    // Pour les autres boutons (si il y en a)
-                    alert('Action: ' + this.textContent + '\nContacts: contact@orgaprop.net');
-                }
-            });
-        });
-
-        // Animation des métriques
-        const animateNumbers = () => {
-            const metrics = document.querySelectorAll('.metric-value');
-            metrics.forEach(metric => {
-                const text = metric.textContent;
-                
-                // Vérifier si c'est le pourcentage
-                if (text.includes('%')) {
-                    // Ne pas animer le pourcentage, le laisser tel quel
-                    return;
-                }
-                
-                // Extraire le nombre en gérant les virgules
-                let number;
-                if (text.includes(',')) {
-                    number = parseInt(text.replace(/,/g, ''));
-                } else {
-                    number = parseInt(text.replace(/\D/g, ''));
-                }
-                
-                if (number && !metric.animated) {
-                    metric.animated = true;
+        function animateNumbers() {
+            if (currentSlide === 1) { // Slide des statistiques
+                const statNumbers = document.querySelectorAll('.stat-number');
+                statNumbers.forEach((element, index) => {
+                    const target = parseInt(element.textContent.replace(/,/g, ''));
                     let current = 0;
-                    const increment = number / 50;
+                    const increment = target / 50;
+                    
                     const timer = setInterval(() => {
                         current += increment;
-                        if (current >= number) {
-                            current = number;
+                        if (current >= target) {
+                            current = target;
                             clearInterval(timer);
                         }
                         
-                        // Formater le nombre avec des virgules si nécessaire
                         let displayNumber = Math.floor(current);
                         if (displayNumber >= 1000) {
                             displayNumber = displayNumber.toLocaleString('fr-FR');
                         }
-                        
-                        metric.textContent = displayNumber;
+                        element.textContent = displayNumber;
                     }, 30);
-                }
-            });
-        };
+                });
+            }
+        }
 
-        // Déclencher l'animation des nombres quand les métriques sont visibles
-        const metricsObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    animateNumbers();
+        // Navigation au clavier
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                if (currentSlide < slides.length - 1) {
+                    goToSlide(currentSlide + 1);
                 }
-            });
+            } else if (e.key === 'ArrowLeft') {
+                if (currentSlide > 0) {
+                    goToSlide(currentSlide - 1);
+                }
+            }
         });
 
-        document.querySelectorAll('.financial-grid').forEach(grid => {
-            metricsObserver.observe(grid);
+        // Auto-play optionnel (décommenté si souhaité)
+        // setInterval(() => {
+        //     if (currentSlide < slides.length - 1) {
+        //         goToSlide(currentSlide + 1);
+        //     } else {
+        //         goToSlide(0);
+        //     }
+        // }, 8000);
+
+        function contactUs() {
+            window.location.href = 'mailto:contact@orgaprop.net?subject=Contact depuis la présentation ORGAprop&body=Bonjour,%0D%0A%0D%0AJe vous contacte suite à votre présentation ORGAprop.%0D%0A%0D%0ACordialement';
+        }
+
+        // Animation initiale
+        updateProgress();
+        
+        // Ajout d'effets sonores visuels
+        document.querySelectorAll('.highlight-card, .timeline-item').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.filter = 'brightness(1.1)';
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.filter = 'brightness(1)';
+            });
         });
     </script>
 </body>
